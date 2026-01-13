@@ -1,0 +1,157 @@
+"use client";
+
+import { sendLoginname } from "@/lib/server/loginname";
+import { LoginSettings } from "@zitadel/proto/zitadel/settings/v2/login_settings_pb";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Alert } from "./alert";
+import { Button, ButtonVariants } from "./button";
+import { TextInput } from "./input";
+import { Spinner } from "./spinner";
+import { Translated } from "./translated";
+import { useTranslations } from "next-intl";
+
+type Inputs = {
+  loginName: string;
+};
+
+type Props = {
+  loginName: string | undefined;
+  requestId: string | undefined;
+  loginSettings: LoginSettings | undefined;
+  organization?: string;
+  suffix?: string;
+  submit: boolean;
+  allowRegister: boolean;
+};
+
+export function UsernameForm({
+  loginName,
+  requestId,
+  organization,
+  suffix,
+  loginSettings,
+  submit,
+  allowRegister,
+}: Props) {
+  const { register, handleSubmit, formState } = useForm<Inputs>({
+    mode: "onBlur",
+    defaultValues: {
+      loginName: loginName ? loginName : "",
+    },
+  });
+
+  const t = useTranslations("loginname");
+
+  const router = useRouter();
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  async function submitLoginName(values: Inputs, organization?: string) {
+    setLoading(true);
+
+    const res = await sendLoginname({
+      loginName: values.loginName,
+      organization,
+      requestId,
+      suffix,
+    })
+      .catch(() => {
+        setError(t("errors.internalError"));
+        return;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    if (res && "redirect" in res && res.redirect) {
+      return router.push(res.redirect);
+    }
+
+    if (res && "error" in res && res.error) {
+      setError(res.error);
+      return;
+    }
+
+    return res;
+  }
+
+  useEffect(() => {
+    if (submit && loginName) {
+      // When we navigate to this page, we always want to be redirected if submit is true and the parameters are valid.
+      submitLoginName({ loginName }, organization);
+    }
+  }, []);
+
+  let inputLabel = t("labels.loginname");
+  if (
+    loginSettings?.disableLoginWithEmail &&
+    loginSettings?.disableLoginWithPhone
+  ) {
+    inputLabel = t("labels.username");
+  } else if (loginSettings?.disableLoginWithEmail) {
+    inputLabel = t("labels.usernameOrPhoneNumber");
+  } else if (loginSettings?.disableLoginWithPhone) {
+    inputLabel = t("labels.usernameOrEmail");
+  }
+
+  return (
+    <form className="w-full space-y-4">
+      <div>
+        <TextInput
+          type="text"
+          autoComplete="username"
+          {...register("loginName", { required: t("required.loginName") })}
+          label={inputLabel}
+          placeholder="john.doe@example.com"
+          data-testid="username-text-input"
+          suffix={suffix}
+        />
+      </div>
+
+      {error && (
+        <div className="py-2" data-testid="error">
+          <Alert>{error}</Alert>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <Button
+          data-testid="submit-button"
+          type="submit"
+          className="w-full"
+          variant={ButtonVariants.Primary}
+          disabled={loading || !formState.isValid}
+          onClick={handleSubmit((e) => submitLoginName(e, organization))}
+        >
+          {loading && <Spinner className="mr-2 h-5 w-5" />}
+          <Translated i18nKey="submit" namespace="loginname" />
+        </Button>
+
+        {allowRegister && (
+          <button
+            className="w-full text-sm text-gray-500 hover:text-[#6366f1] transition-colors"
+            onClick={() => {
+              const registerParams = new URLSearchParams();
+              if (organization) {
+                registerParams.append("organization", organization);
+              }
+              if (requestId) {
+                registerParams.append("requestId", requestId);
+              }
+
+              router.push("/register?" + registerParams);
+            }}
+            type="button"
+            disabled={loading}
+            data-testid="register-button"
+          >
+            <Translated i18nKey="register" namespace="loginname" />
+          </button>
+        )}
+      </div>
+    </form>
+  );
+}

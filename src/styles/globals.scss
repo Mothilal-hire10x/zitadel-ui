@@ -1,0 +1,457 @@
+// include styles from the ui package
+@use "./vars.scss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// 10XScale Brand Colors
+:root {
+  --tenxscale-primary: #6366f1;
+  --tenxscale-primary-dark: #4f46e5;
+  --tenxscale-secondary: #8b5cf6;
+  --tenxscale-accent: #a855f7;
+  --tenxscale-gradient-start: #6366f1;
+  --tenxscale-gradient-middle: #8b5cf6;
+  --tenxscale-gradient-end: #a855f7;
+  --tenxscale-dark-bg: #0f172a;
+  --tenxscale-dark-card: #1e293b;
+  --tenxscale-success: #10b981;
+  --tenxscale-warning: #f59e0b;
+}
+
+@layer base {
+  h1,
+  .ztdl-h1 {
+    @apply text-center text-3xl font-bold bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#a855f7] dark:from-[#818cf8] dark:via-[#a78bfa] dark:to-[#c084fc] bg-clip-text text-transparent;
+  }
+
+  .ztdl-p {
+    @apply text-sm text-gray-600 dark:text-gray-400 text-center leading-relaxed;
+  }
+}
+
+@layer components {
+  // 10XScale Enhanced Card with Glass Morphism
+  .enhanced-card {
+    @apply relative overflow-hidden backdrop-blur-xl;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark .enhanced-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.90) 100%);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  
+  .enhanced-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-30 pointer-events-none;
+    background: radial-gradient(ellipse at top left, rgba(99, 102, 241, 0.2), transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.2), transparent 50%);
+  }
+
+  // 10XScale Gradient Border Effect
+  .gradient-border {
+    @apply relative;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%);
+  }
+  
+  .gradient-border::before {
+    content: '';
+    @apply absolute -inset-[1px] -z-10 rounded-2xl;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+    opacity: 0.5;
+  }
+
+  .glow-effect {
+    @apply relative;
+  }
+  
+  .glow-effect::after {
+    content: '';
+    @apply absolute -inset-2 rounded-3xl opacity-0 transition-opacity duration-500;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+    filter: blur(30px);
+    z-index: -1;
+  }
+  
+  .glow-effect:hover::after {
+    @apply opacity-40;
+  }
+
+  // 10XScale Enhanced Input Fields
+  .input-enhanced {
+    @apply transition-all duration-300 ease-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .input-enhanced:focus-within {
+    @apply ring-2 ring-[#6366f1]/30 dark:ring-[#818cf8]/30;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 4px 12px rgba(99, 102, 241, 0.15);
+    transform: translateY(-1px);
+  }
+
+  // 10XScale Primary Button - Gradient with Glow
+  .btn-primary-enhanced {
+    @apply relative overflow-hidden transition-all duration-300 font-semibold tracking-wide;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  }
+  
+  .btn-primary-enhanced:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+  }
+  
+  .btn-primary-enhanced:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  }
+  
+  .btn-primary-enhanced::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #c084fc 100%);
+  }
+  
+  .btn-primary-enhanced:hover::before {
+    @apply opacity-100;
+  }
+
+  .btn-secondary-enhanced {
+    @apply relative overflow-hidden transition-all duration-300 border-2 border-[#6366f1]/30 dark:border-[#818cf8]/30;
+    background: transparent;
+  }
+  
+  .btn-secondary-enhanced:hover {
+    @apply bg-[#6366f1]/5 dark:bg-[#818cf8]/10 border-[#6366f1] dark:border-[#818cf8];
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+  }
+
+  .floating-label {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 transition-all duration-300 pointer-events-none;
+  }
+  
+  .floating-label.active {
+    @apply top-0 text-xs text-[#6366f1] dark:text-[#818cf8] bg-white dark:bg-slate-900 px-2 font-medium;
+  }
+
+  // 10XScale Auth Method Cards
+  .auth-method-card {
+    @apply relative p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 cursor-pointer transition-all duration-300;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+  }
+  
+  .dark .auth-method-card {
+    background: linear-gradient(135deg, rgba(30,41,59,0.95) 0%, rgba(15,23,42,0.85) 100%);
+  }
+  
+  .auth-method-card:hover {
+    @apply border-[#6366f1] dark:border-[#818cf8];
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+  }
+  
+  .auth-method-card.selected {
+    @apply border-[#6366f1] dark:border-[#818cf8];
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+  }
+
+  // 10XScale Divider with Gradient
+  .divider-with-text {
+    @apply flex items-center my-8;
+  }
+  
+  .divider-with-text::before,
+  .divider-with-text::after {
+    content: '';
+    @apply flex-1 h-px;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+  }
+  
+  .divider-with-text span {
+    @apply px-4 text-sm text-gray-500 dark:text-gray-400 font-medium;
+  }
+
+  // 10XScale Animated Background
+  .animated-bg {
+    @apply fixed inset-0 -z-10 overflow-hidden;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+  
+  .dark .animated-bg {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  }
+  
+  .animated-bg::before {
+    content: '';
+    @apply absolute w-[600px] h-[600px] rounded-full opacity-30;
+    top: -200px;
+    left: -200px;
+    background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+    animation: float-slow 25s ease-in-out infinite;
+  }
+  
+  .animated-bg::after {
+    content: '';
+    @apply absolute w-[500px] h-[500px] rounded-full opacity-25;
+    bottom: -150px;
+    right: -150px;
+    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+    animation: float-slow 30s ease-in-out infinite reverse;
+  }
+
+  // Additional Floating Elements
+  .animated-bg-extra {
+    @apply absolute w-[400px] h-[400px] rounded-full opacity-20;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+    animation: pulse-glow 8s ease-in-out infinite;
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(50px, 50px) scale(1.1); }
+    50% { transform: translate(0, 100px) scale(1); }
+    75% { transform: translate(-50px, 50px) scale(0.9); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.25; transform: translate(-50%, -50%) scale(1.2); }
+  }
+
+  // 10XScale Enhanced Animations
+  .slide-up {
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-in-left {
+    animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .slide-in-right {
+    animation: slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  // 10XScale Floating Particles Animation
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0) translateX(0); 
+      opacity: 0.6;
+    }
+    25% { 
+      transform: translateY(-15px) translateX(5px); 
+      opacity: 0.8;
+    }
+    50% { 
+      transform: translateY(-25px) translateX(-5px); 
+      opacity: 0.4;
+    }
+    75% { 
+      transform: translateY(-10px) translateX(8px); 
+      opacity: 0.7;
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  // 10XScale Social Login Buttons
+  .social-btn {
+    @apply flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .social-btn:hover {
+    @apply border-[#6366f1]/30 dark:border-[#818cf8]/30;
+  }
+
+  // 10XScale Feature Badges
+  .feature-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+    color: #6366f1;
+  }
+
+  .dark .feature-badge {
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.15) 0%, rgba(196, 181, 253, 0.15) 100%);
+    color: #a78bfa;
+  }
+
+  // 10XScale Trust Indicators
+  .trust-indicator {
+    @apply flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400;
+  }
+
+  .trust-indicator svg {
+    @apply w-4 h-4 text-[#10b981];
+  }
+}
+
+html {
+  --background-color: #f8fafc;
+  --dark-background-color: #0f172a;
+}
+
+.dark {
+  --background-color: #0f172a;
+}
+
+.form-checkbox:checked {
+  background-image: url("/checkbox.svg");
+}
+
+// 10XScale Logo Animation
+.logo-float {
+  animation: logoFloat 6s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+// 10XScale Shimmer Effect
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.skeleton {
+  --accents-2: var(--theme-light-background-400);
+  --accents-1: var(--theme-light-background-500);
+
+  background-image: linear-gradient(270deg, var(--accents-1), var(--accents-2), var(--accents-2), var(--accents-1));
+  background-size: 400% 100%;
+  animation: skeleton_loading 8s ease-in-out infinite;
+}
+
+.dark .skeleton {
+  --accents-2: var(--theme-dark-background-400);
+  --accents-1: var(--theme-dark-background-500);
+
+  background-image: linear-gradient(270deg, var(--accents-1), var(--accents-2), var(--accents-2), var(--accents-1));
+  background-size: 400% 100%;
+  animation: skeleton_loading 8s ease-in-out infinite;
+}
+
+@keyframes skeleton_loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// 10XScale Footer Styling
+.tenxscale-footer {
+  @apply text-center text-xs text-gray-500 dark:text-gray-400 py-4;
+}
+
+.tenxscale-footer a {
+  @apply text-[#6366f1] dark:text-[#818cf8] hover:underline transition-colors;
+}
+
+// 10XScale Security Badge
+.security-badge {
+  @apply inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400;
+}
+
+.security-badge svg {
+  @apply w-3.5 h-3.5;
+}
+
+// 10XScale Progress Indicator
+.progress-dots {
+  @apply flex gap-2;
+}
+
+.progress-dot {
+  @apply w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300;
+}
+
+.progress-dot.active {
+  @apply w-6 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6];
+}
+
