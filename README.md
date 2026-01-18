@@ -1,221 +1,191 @@
-# ZITADEL Login UI
+# 10XScale.ai Login UI
 
-This is the login interface for ZITADEL, built with Next.js 15, React 19, and Tailwind CSS.
+Custom login interface for 10XScale.ai, built with Next.js 15, React 19, and Tailwind CSS. Based on ZITADEL's login UI with custom branding and side-by-side layout.
 
-## Prerequisites
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/10XScale-in/zitadel-ui)
+
+## 🚀 Live Demo
+
+**Production**: [https://zitadel-ui-flax.vercel.app/ui/v2/login/loginname](https://zitadel-ui-flax.vercel.app/ui/v2/login/loginname)
+
+## ✨ Features
+
+- **Side-by-side Layout**: Modern split-screen design with branding panel
+- **10XScale.ai Branding**: Custom logos, colors, and trust badges
+- **Network Background**: Professional tech-inspired background image
+- **Responsive Design**: Adapts to mobile with top-to-bottom layout
+- **Dark Mode Support**: Automatic theme switching
+- **12 Languages**: Full internationalization support
+- **Vercel Optimized**: Ready for serverless deployment
+
+## 📋 Prerequisites
 
 - **Node.js**: v20.x or higher
-- **pnpm**: v10.x (specified in package.json: `pnpm@10.13.1`)
-- **Operating System**: Linux, macOS, or Windows with WSL
+- **pnpm**: v10.x (`npm install -g pnpm`)
 
-## Project Structure
+## 🛠️ Installation
 
-⚠️ **Important**: This project is part of a **pnpm workspace** (monorepo). It cannot be run standalone without its workspace dependencies.
-
-```
-zitadel/                          # Main workspace root
-├── pnpm-workspace.yaml           # Workspace configuration
-├── packages/
-│   ├── zitadel-client/          # @zitadel/client package
-│   └── zitadel-proto/           # @zitadel/proto package
-└── apps/
-    └── login/                    # This project (zitadel-ui)
-```
-
-## Initial Setup
-
-### 1. Navigate to Workspace Root
+### 1. Clone the Repository
 
 ```bash
-cd /home/mothilal/Documents/temp/zitadel
+git clone https://github.com/10XScale-in/zitadel-ui.git
+cd zitadel-ui
 ```
 
 ### 2. Install Dependencies
 
-Install all workspace dependencies using pnpm:
-
 ```bash
 pnpm install
-# or
-npx pnpm install
 ```
 
-This will install dependencies for all workspace packages including:
-- `@zitadel/client` (workspace package)
-- `@zitadel/proto` (workspace package)
-- All npm dependencies
+### 3. Configure Environment
 
-### 3. Run Development Server
+Create a `.env.local` file:
 
-#### Option A: From the workspace root (recommended)
-```bash
-pnpm --filter "@zitadel/login" dev
+```env
+# Zitadel Backend
+ZITADEL_API_URL=https://dev.10xscale.ai
+
+# Service User Token (for API calls)
+ZITADEL_SERVICE_USER_TOKEN=your_service_user_token
+
+# Theme Configuration
+NEXT_PUBLIC_THEME_LAYOUT=side-by-side
+NEXT_PUBLIC_BASE_PATH=/ui/v2/login
 ```
 
-#### Option B: From the app directory
-```bash
-cd apps/login
-HOSTNAME=127.0.0.1 ./scripts/entrypoint.sh npx next dev
-```
-
-The development server will start on:
-- **Local**: http://localhost:3000 (or next available port)
-- **Network**: http://[your-local-ip]:3000
-
-## Configuration
-
-The application uses environment variables that can be configured in:
-- `.env` file in the project root
-- `/.env-file/.env` (Docker volume mount)
-
-### Key Environment Variables
-
-- `HOSTNAME`: The hostname to bind to (default: `127.0.0.1`)
-- `ZITADEL_SERVICE_USER_TOKEN`: Service user token for ZITADEL API
-- `ZITADEL_SERVICE_USER_TOKEN_FILE`: Path to file containing the token
-
-## Scripts
+### 4. Run Development Server
 
 ```bash
-# Development
-pnpm dev                    # Start development server
-
-# Production
-pnpm build                  # Build for production (standalone)
-pnpm build-vercel          # Build for Vercel deployment
-pnpm prod                  # Run production server
-
-# Code Quality
-pnpm lint-check-next       # Run Next.js linter
-pnpm lint-check-prettier   # Check code formatting
-pnpm lint-fix              # Auto-fix formatting issues
-
-# Testing
-pnpm test-unit             # Run unit tests with Vitest
-
-# Maintenance
-pnpm clean                 # Remove node_modules, .next, and cypress folders
+pnpm dev
 ```
 
-## Dependencies
+Open [http://localhost:3000](http://localhost:3000)
 
-### Key Runtime Dependencies
-- **Next.js**: 15.5.9
-- **React**: 19.2.3
-- **React Hook Form**: 7.54.2 (updated for React 19 compatibility)
-- **Tailwind CSS**: 3.4.14
-- **next-intl**: 3.25.1 (internationalization)
-- **nice-grpc**: 2.0.1 (gRPC client)
+## 🚢 Deployment
 
-### Workspace Dependencies
-- `@zitadel/client`: Shared client utilities
-- `@zitadel/proto`: Generated Protocol Buffer types
-
-## Troubleshooting
-
-### Issue: "Cannot find module '@zitadel/client' or '@zitadel/proto'"
-
-**Cause**: Trying to run the project outside the workspace.
-
-**Solution**: 
-1. Navigate to the workspace root: `cd /home/mothilal/Documents/temp/zitadel`
-2. Install dependencies: `pnpm install`
-3. Run from workspace root: `pnpm --filter "@zitadel/login" dev`
-
-### Issue: "ERESOLVE unable to resolve dependency tree" (React version conflict)
-
-**Cause**: react-hook-form 7.39.5 doesn't support React 19.
-
-**Solution**: Already fixed in package.json. The project now uses react-hook-form ^7.54.2 which supports React 19.
-
-### Issue: Port 3000 is already in use
-
-**Cause**: Another process is using port 3000.
-
-**Solution**: 
-- Next.js will automatically use the next available port (e.g., 3001)
-- Or stop the process using port 3000: `lsof -ti:3000 | xargs kill -9`
-
-### Issue: 404 Error on Root Path
-
-**Cause**: This is a ZITADEL login UI that requires backend configuration.
-
-**Solution**: This is expected behavior. The application needs to be connected to a ZITADEL instance with proper authentication flow configuration.
-
-## Docker Deployment
-
-The project includes Docker support:
+### Vercel (Recommended)
 
 ```bash
-# Build image
-docker build -f Dockerfile -t zitadel-login .
+# Install Vercel CLI
+npm i -g vercel
 
-# Run container
-docker run -p 3000:3000 \
-  -v /path/to/.env:/.env-file/.env \
-  zitadel-login
+# Deploy
+vercel --prod
 ```
 
-## Development
+### Environment Variables for Vercel
 
-### Project Structure
+Set these in your Vercel project settings:
+
+| Variable | Description |
+|----------|-------------|
+| `ZITADEL_API_URL` | Your Zitadel instance URL |
+| `ZITADEL_SERVICE_USER_TOKEN` | Service user PAT token |
+| `NEXT_PUBLIC_THEME_LAYOUT` | `side-by-side` or `top-to-bottom` |
+| `NEXT_PUBLIC_BASE_PATH` | Base path (e.g., `/ui/v2/login`) |
+
+## 📁 Project Structure
+
 ```
 src/
-├── app/              # Next.js app router pages
-├── components/       # React components
-├── helpers/          # Utility functions
-├── i18n/            # Internationalization
-├── lib/             # Shared libraries
-└── styles/          # Global styles
+├── app/                    # Next.js App Router pages
+│   └── (login)/           # Login flow pages
+├── components/
+│   ├── dynamic-theme.tsx  # Side-by-side/top-to-bottom layout
+│   └── ...                # UI components
+├── lib/
+│   ├── theme.ts           # Theme configuration
+│   ├── server-transport.ts # HTTP Connect transport
+│   └── zitadel.ts         # Zitadel client setup
+└── styles/                # Global CSS
 
-locales/             # Translation files (12 languages)
-public/              # Static assets
-integration/         # Cypress integration tests
-acceptance/          # Playwright acceptance tests
+public/
+├── ui/v2/login/
+│   ├── 10xscale-black.svg # Dark logo
+│   ├── 10xscale-white.svg # Light logo
+│   └── 9142209.jpg        # Background image
+└── ...
 ```
 
-### Theme Customization
+## 🎨 Theme Customization
 
-See [THEME_CUSTOMIZATION.md](THEME_CUSTOMIZATION.md) and [THEME_ARCHITECTURE.md](THEME_ARCHITECTURE.md) for details on customizing the UI theme.
+### Layout Options
 
-## Testing
+Set `NEXT_PUBLIC_THEME_LAYOUT`:
 
-### Unit Tests
+- **`side-by-side`**: Split screen with branding on left, form on right
+- **`top-to-bottom`**: Traditional stacked layout
+
+### Appearance Options
+
+Set `NEXT_PUBLIC_THEME_APPEARANCE`:
+
+- **`flat`**: Clean, minimal borders
+- **`material`**: Elevated with shadows
+- **`glass`**: Frosted glass effect
+
+### Roundness Options
+
+Set `NEXT_PUBLIC_THEME_ROUNDNESS`:
+
+- **`edgy`**: Sharp corners
+- **`mid`**: Subtle rounding
+- **`full`**: Fully rounded
+
+See [THEME_CUSTOMIZATION.md](THEME_CUSTOMIZATION.md) for detailed documentation.
+
+## 🧪 Testing
+
 ```bash
+# Unit tests
 pnpm test-unit
+
+# Lint check
+pnpm lint-check-next
+
+# Format check
+pnpm lint-check-prettier
 ```
 
-### Integration Tests (Cypress)
-```bash
-pnpm cypress:open    # Interactive mode
-```
+## 📜 Scripts
 
-### Acceptance Tests (Playwright)
-```bash
-cd acceptance
-npx playwright test
-```
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server |
+| `pnpm build` | Build for production |
+| `pnpm start` | Run production server |
+| `pnpm lint-fix` | Auto-fix formatting |
+| `pnpm test-unit` | Run unit tests |
+| `pnpm clean` | Remove build artifacts |
 
-## Package Manager
+## 🔧 Tech Stack
 
-This project **requires pnpm** due to workspace configuration. Do not use npm or yarn:
+- **Framework**: Next.js 15.5.9
+- **UI**: React 19, Tailwind CSS 3.4
+- **API**: @connectrpc/connect-web (HTTP Connect protocol)
+- **Auth**: Zitadel (@zitadel/client, @zitadel/proto)
+- **i18n**: next-intl (12 languages)
+- **Forms**: react-hook-form 7.54
 
-```bash
-# ✅ Correct
-pnpm install
-pnpm dev
+## 🤝 Contributing
 
-# ❌ Incorrect
-npm install
-yarn install
-```
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Commit changes: `git commit -m 'Add my feature'`
+4. Push to branch: `git push origin feature/my-feature`
+5. Open a Pull Request
 
-## License
+## 📄 License
 
 See [LICENSE](LICENSE) file for details.
 
-## Support
+## 🔗 Links
 
-For issues related to ZITADEL, visit:
-- Documentation: https://zitadel.com/docs
-- GitHub: https://github.com/zitadel/zitadel
+- **Repository**: [https://github.com/10XScale-in/zitadel-ui](https://github.com/10XScale-in/zitadel-ui)
+- **10XScale.ai**: [https://10xscale.ai](https://10xscale.ai)
+- **Zitadel Docs**: [https://zitadel.com/docs](https://zitadel.com/docs)
+
+---
+
+Built with ❤️ by [10XScale.ai](https://10xscale.ai)
