@@ -4,7 +4,7 @@ import { Translated } from "@/components/translated";
 import { getAllSessionCookieIds } from "@/lib/cookies";
 import { getServiceConfig } from "@/lib/service-url";
 import { getBrandingSettings, getDefaultOrg, listSessions, ServiceConfig } from "@/lib/zitadel";
-import { verifyJwt } from "@zitadel/client/node";
+import { verifyJwt } from "@/lib/jwt-verify";
 import { Organization } from "@zitadel/proto/zitadel/org/v2/org_pb";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -39,7 +39,7 @@ export default async function Page(props: { searchParams: Promise<Record<string 
   let postLogoutRedirectUri, logoutHint;
   if (logoutToken) {
     try {
-      const payload = await verifyJwt<{ post_logout_redirect_uri?: string; logoutHint?: string }>(
+      const payload = await verifyJwt<{ post_logout_redirect_uri?: string; logout_hint?: string }>(
         logoutToken,
         `${serviceConfig.baseUrl}/oauth/v2/keys`,
         {

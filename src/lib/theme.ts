@@ -39,7 +39,7 @@ export const DEFAULT_COMPONENT_ROUNDNESS: ComponentRoundnessConfig = {
 export const DEFAULT_THEME: ThemeConfig = {
   roundness: "mid",
   componentRoundness: DEFAULT_COMPONENT_ROUNDNESS,
-  layout: "top-to-bottom",
+  layout: "side-by-side",
   appearance: "flat",
   spacing: "regular",
 };
@@ -62,13 +62,18 @@ export function getThemeConfig(): ThemeConfig {
       }
     : DEFAULT_COMPONENT_ROUNDNESS;
 
+  // Trim env vars to handle any trailing whitespace/newlines
+  const layoutEnv = process.env.NEXT_PUBLIC_THEME_LAYOUT?.trim() as ThemeLayout | undefined;
+  const appearanceEnv = process.env.NEXT_PUBLIC_THEME_APPEARANCE?.trim() as ThemeAppearance | undefined;
+  const spacingEnv = process.env.NEXT_PUBLIC_THEME_SPACING?.trim() as ThemeSpacing | undefined;
+
   return {
     roundness: globalRoundness || DEFAULT_THEME.roundness,
     componentRoundness: componentRoundness,
-    layout: (process.env.NEXT_PUBLIC_THEME_LAYOUT as ThemeLayout) || DEFAULT_THEME.layout,
-    backgroundImage: process.env.NEXT_PUBLIC_THEME_BACKGROUND_IMAGE || undefined,
-    appearance: (process.env.NEXT_PUBLIC_THEME_APPEARANCE as ThemeAppearance) || DEFAULT_THEME.appearance,
-    spacing: (process.env.NEXT_PUBLIC_THEME_SPACING as ThemeSpacing) || DEFAULT_THEME.spacing,
+    layout: layoutEnv || DEFAULT_THEME.layout,
+    backgroundImage: process.env.NEXT_PUBLIC_THEME_BACKGROUND_IMAGE?.trim() || undefined,
+    appearance: appearanceEnv || DEFAULT_THEME.appearance,
+    spacing: spacingEnv || DEFAULT_THEME.spacing,
   };
 }
 

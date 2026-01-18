@@ -16,7 +16,8 @@ import {
   ServiceConfig,
 } from "@/lib/zitadel";
 import { headers } from "next/headers";
-import { Code, ConnectError, create } from "@zitadel/client";
+import { create } from "@zitadel/client";
+import { Code, ConnectError } from "@/lib/connect-error";
 import { AutoLinkingOption } from "@zitadel/proto/zitadel/idp/v2/idp_pb";
 import { OrganizationSchema } from "@zitadel/proto/zitadel/object/v2/object_pb";
 import {
@@ -279,7 +280,9 @@ async function handleExplicitLinking(ctx: IDPHandlerContext): Promise<IDPHandler
  */
 async function handleUserExists(ctx: IDPHandlerContext): Promise<IDPHandlerResult> {
   const { sessionId } = ctx.params;
-  const { userId, updateHumanUser } = ctx.intent;
+  // Use type assertion to handle optional property that may not exist in npm package types
+  const { userId } = ctx.intent;
+  const updateHumanUser = (ctx.intent as { updateHumanUser?: typeof ctx.intent.addHumanUser }).updateHumanUser;
   const { options, serviceConfig, t } = ctx;
 
   if (userId && !sessionId) {

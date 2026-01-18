@@ -8,7 +8,8 @@ import {
   getSession,
   setSession,
 } from "@/lib/zitadel";
-import { ConnectError, Duration, timestampMs } from "@zitadel/client";
+import { Duration, timestampMs } from "@zitadel/client";
+import { ConnectError } from "@/lib/connect-error";
 import { CredentialsCheckError, CredentialsCheckErrorSchema, ErrorDetail } from "@zitadel/proto/zitadel/message_pb";
 import { Challenges, RequestChallenges } from "@zitadel/proto/zitadel/session/v2/challenge_pb";
 import { Session } from "@zitadel/proto/zitadel/session/v2/session_pb";
@@ -28,9 +29,9 @@ type CustomCookieData = {
 };
 
 const passwordAttemptsHandler = (error: ConnectError) => {
-  const details = error.findDetails(CredentialsCheckErrorSchema);
+  const details = error.findDetails<{ failedAttempts?: bigint }>(CredentialsCheckErrorSchema);
 
-  if (details[0] && "failedAttempts" in details[0]) {
+  if (details[0] && details[0].failedAttempts !== undefined) {
     const failedAttempts = details[0].failedAttempts;
     throw {
       error: `Failed to authenticate: You had ${failedAttempts} password attempts.`,

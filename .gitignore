@@ -15,3 +15,16 @@ dist-ssr
 /blob-report/
 
 .env
+.env.vercel
+.vercel
+
+# Firebase (not used - deployed on Vercel)
+.firebase/
+.firebaserc
+firebase.json
+
+# Screenshots (development only)
+screenshots/
+
+# Lock files (pnpm-lock.yaml is auto-generated)
+# Keep pnpm-lock.yaml for reproducible builds
